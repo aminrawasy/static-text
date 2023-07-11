@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { StaticText } from './entities/static_text.entity';
 import { Repository } from 'typeorm';
+import { UpdateStaticTextDto } from './dto/update-static_text.dto';
 
 @Injectable()
 export class StaticTextService {
@@ -14,8 +15,18 @@ export class StaticTextService {
     return await this.staticTextRepo.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} staticText`;
+  async update(
+    id: number,
+    updateUserDto: UpdateStaticTextDto,
+  ): Promise<StaticText> {
+    const static_text = await this.staticTextRepo.findOne({
+      where: { id },
+    });
+    static_text.key = updateUserDto.key;
+    static_text.language = updateUserDto.language;
+    static_text.value = updateUserDto.value;
+
+    return await this.staticTextRepo.save(static_text);
   }
 
   remove(id: number) {
