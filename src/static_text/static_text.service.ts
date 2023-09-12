@@ -32,4 +32,7 @@ export class StaticTextService {
   remove(id: number) {
     return `This action removes a #${id} staticText`;
   }
+  async findOne(id: number) {
+    return await this.staticTextRepo.find({ where: { id } });
+  }
 }
